@@ -68,12 +68,15 @@ Laravel-CRUD/
 
    ```bash
    composer install
+   composer update
    ```
 3. Setup environment:
 
    ```bash
    cp .env.example .env
+   php artisan config:cache
    php artisan key:generate
+   php artisan config:cahce
    ```
 4. Configure database credentials in `.env` file.
 5. Run migrations and seeders:
