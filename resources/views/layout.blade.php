@@ -71,7 +71,7 @@
 
           <!-- Logo Start -->
           <div class="logo position-relative">
-            <a href="{{ route('posts.index') }}">
+            <a href="{{ route('home') }}">
               <div class="img"></div>
               <span id="logoText" class="text-white fw-bold ms-2">Laravel CRUD</span>
             </a>
@@ -98,6 +98,7 @@
 
           <!-- User Menu Start -->
           <div id="userMenu" class="user-container d-flex">
+            @if(Auth::check())
             <a 
               href="#" 
               class="d-flex user position-relative" 
@@ -106,7 +107,7 @@
               aria-expanded="false"
             >
               <img class="profile" alt="profile" src="{{ asset('img/profile/profile-9.webp') }}" />
-              <div class="name">User</div>
+              <div class="name">{{ Auth::user()->name }}</div>
             </a>
 
             <div class="dropdown-menu dropdown-menu-end user-menu wide">
@@ -116,15 +117,15 @@
                 </div>
                 <div class="col-6 ps-1 pe-1">
                   <ul class="list-unstyled">
-                    <li><a href="#">User Info</a></li>
-                    <li><a href="#">Preferences</a></li>
+                    <li><a href="{{ route('home') }}">Dashboard</a></li>
+                    <li><a href="#">Profile</a></li>
                     <li><a href="#">Settings</a></li>
                   </ul>
                 </div>
                 <div class="col-6 pe-1 ps-1">
                   <ul class="list-unstyled">
                     <li><a href="#">Security</a></li>
-                    <li><a href="#">Billing</a></li>
+                    <li><a href="#">Preferences</a></li>
                   </ul>
                 </div>
               </div>
@@ -146,15 +147,24 @@
                 <div class="col-6 pe-1 ps-1">
                   <ul class="list-unstyled">
                     <li>
-                      <a href="#">
-                        <i data-acorn-icon="logout" class="me-2" data-acorn-size="17"></i>
-                        <span class="align-middle">Logout</span>
-                      </a>
+                      <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="btn btn-link p-0 text-decoration-none">
+                          <i data-acorn-icon="logout" class="me-2" data-acorn-size="17"></i>
+                          <span class="align-middle">Logout</span>
+                        </button>
+                      </form>
                     </li>
                   </ul>
                 </div>
               </div>
             </div>
+            @else
+            <div class="d-flex align-items-center">
+              <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm me-2">Login</a>
+              <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Register</a>
+            </div>
+            @endif
           </div>
           <!-- User Menu End -->
 
@@ -183,6 +193,12 @@
           <!-- Menu Start -->
           <div class="menu-container flex-grow-1">
             <ul id="menu" class="menu">
+              <li>
+                  <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">
+                  <i data-acorn-icon="home" class="icon" data-acorn-size="18"></i>
+                  <span class="label">Dashboard</span>
+                </a>
+              </li>
               <li>
                 <a href="{{ route('posts.index') }}" class="{{ request()->routeIs('posts.*') ? 'active' : '' }}">
                   <i data-acorn-icon="file-text" class="icon" data-acorn-size="18"></i>
@@ -233,7 +249,7 @@
                 <h1 class="mb-0 pb-0 display-4" id="title">@yield('page-title', 'Laravel CRUD')</h1>
                 <nav class="breadcrumb-container d-inline-block" aria-label="breadcrumb">
                   <ul class="breadcrumb pt-0">
-                    <li class="breadcrumb-item"><a href="{{ route('posts.index') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                     @yield('breadcrumb')
                   </ul>
                 </nav>
@@ -259,6 +275,9 @@
               </div>
               <div class="col-sm-6 d-none d-sm-block">
                 <ul class="breadcrumb pt-0 pe-0 mb-0 float-end">
+                  <li class="breadcrumb-item mb-0 text-medium">
+                    <a href="{{ route('home') }}" class="btn-link">Dashboard</a>
+                  </li>
                   <li class="breadcrumb-item mb-0 text-medium">
                     <a href="{{ route('posts.index') }}" class="btn-link">Posts</a>
                   </li>
